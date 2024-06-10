@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mp3/random_quote_generator/data/model/quote_model.dart';
+import 'package:share/share.dart';
 
 import '../data/repo/repo_impl.dart';
 
@@ -24,6 +25,12 @@ class _RandomQuoteScreenState extends State<RandomQuoteScreen> {
       message = "Failed to load a quote";
     }
     setState(() {});
+  }
+
+  void _shareQuote() {
+    if (_quote != null) {
+      Share.share('${_quote!.content} - ${_quote!.author}');
+    }
   }
 
   @override
@@ -57,9 +64,21 @@ class _RandomQuoteScreenState extends State<RandomQuoteScreen> {
               ),
             ),
             const SizedBox(height: 35),
-            ElevatedButton(
-              onPressed: _getRandomQuote,
-              child: const Text('Get Random Quote'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: _getRandomQuote,
+                  child: const Text('Get Random Quote'),
+                ),
+                if (_quote != null) ...[
+                  const SizedBox(width: 10.0),
+                  ElevatedButton(
+                    onPressed: _shareQuote,
+                    child: const Text('Share'),
+                  ),
+                ]
+              ],
             ),
           ],
         ),
